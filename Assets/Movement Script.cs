@@ -12,11 +12,11 @@ public class NewBehaviourScript : MonoBehaviour
     public SpriteRenderer SR;
     public Rigidbody2D RB;
     public float speed = 6;
-    public int score = 0;
+    public int Score = 0;
 
     void Start()
     {
-
+        UpdateScore();
     }
 
     void Update()
@@ -79,5 +79,37 @@ public class NewBehaviourScript : MonoBehaviour
     {
         return true;
     }
+
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+    
+       
+        if (other.gameObject.CompareTag("Hazard"))
+        {
+            
+            Die();
+        }
+
+        CoinScript coin = other.gameObject.GetComponent<CoinScript>();
+     
+        if (coin != null)
+        {
+            coin.GetBumped();
+        
+            Score++;
+     
+            UpdateScore();
+        }
+    }
+
+    public void UpdateScore()
+    {
+        ScoreText.text = "Score: " + Score;
+    }
+
+    public void Die()
+    {
+        SceneManager.LoadScene("Game Over");
+    }
 }
- 
