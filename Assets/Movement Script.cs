@@ -13,7 +13,6 @@ public class NewBehaviourScript : MonoBehaviour
     public Rigidbody2D RB;
     public float speed = 6;
     public int Score = 0;
-
     void Start()
     {
         UpdateScore();
@@ -30,20 +29,11 @@ public class NewBehaviourScript : MonoBehaviour
             pos.x += speed * Time.deltaTime;
         }
 
-        if (Keyboard.current.dKey.isPressed && Keyboard.current.qKey.isPressed)
-        {
-            pos.x += speed * Time.deltaTime * 2;
-        }
-
         if (Keyboard.current.aKey.isPressed)
         {
             pos.x -= speed * Time.deltaTime;
         }
-
-        if (Keyboard.current.aKey.isPressed && Keyboard.current.qKey.isPressed)
-        {
-            pos.x -= speed * Time.deltaTime * 2;
-        }
+        
 
         if (Keyboard.current.spaceKey.wasPressedThisFrame &&
             (OnGround() || JumpsLeft > 0))
@@ -83,22 +73,27 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-    
-       
+
+
         if (other.gameObject.CompareTag("Hazard"))
         {
-            
+
             Die();
         }
 
+        if (other.gameObject.CompareTag("Goal"))
+        {
+            Win();
+        }
+
         CoinScript coin = other.gameObject.GetComponent<CoinScript>();
-     
+
         if (coin != null)
         {
             coin.GetBumped();
-        
+
             Score++;
-     
+
             UpdateScore();
         }
     }
@@ -112,4 +107,10 @@ public class NewBehaviourScript : MonoBehaviour
     {
         SceneManager.LoadScene("Game Over");
     }
+
+    public void Win()
+    {
+        SceneManager.LoadScene("Win");
+    }
 }
+
